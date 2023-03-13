@@ -1,0 +1,66 @@
+#
+# A couple of useful guides & docs:
+#
+# - Main Bitrise CLI docs: https://github.com/bitrise-io/bitrise/tree/master/_docs
+# - Step Development Guideline: https://github.com/bitrise-io/bitrise/blob/master/_docs/step-development-guideline.md
+# - Bitrise.yml format spec: https://github.com/bitrise-io/bitrise/blob/master/_docs/bitrise-yml-format-spec.md
+# - Bitrise docs: http://devcenter.bitrise.io/
+# - Bitrise CLI guides: http://devcenter.bitrise.io/bitrise-cli/
+
+title: |-
+  Connect to OpenVPN Server
+summary: |
+  Establish a VPN connection with the specified OpenVPN server.
+description: |
+  The Step establishes a VPN connection with the specified OpenVPN server.
+
+  1.Before using this step, you need to build an OpenVPN server in advance.
+  2. Register the contents of CA certificate, client certificate, client private key, base64 encoded as Bitrise Secrets contained in one file.
+       You can easily retrieve the contents of Base64 using command: `$ base64 <certificate or private key file path>`
+
+website: https://github.com/lmr001/bitrise-step-open-vpn
+source_code_url: https://github.com/lmr001/bitrise-step-open-vpn
+support_url: https://github.com/lmr001/bitrise-step-open-vpn
+
+type_tags:
+  - access-control
+
+is_requires_admin_user: true
+is_always_run: false
+is_skippable: false
+run_if: ""
+
+
+deps:
+  brew:
+    - name: openvpn
+  apt_get:
+    - name: openvpn
+    - name: net-tools
+
+
+toolkit:
+  bash:
+    entry_file: step.sh
+
+
+inputs:
+  - vpn_ovpn_base64: "$VPN_OVPN_BASE64"
+    opts:
+      title: "OpenVPN base64 file"
+      summary: "Base64 encoded Open VPN file that contains all the contents of CA certificate, client certificate, client private key"
+      is_expand: true
+      is_required: true
+      is_sensitive: true
+  - vpn_url__connection_test:
+    opts:
+      title: "URL to test vpn connection"
+      summary: "URL to test vpn connection"
+      is_expand: true
+      is_required: true
+      is_sensitive: true
+
+outputs:
+  - OPENVPN_LOG_PATH:
+    opts:
+      title: "Output log file path"
