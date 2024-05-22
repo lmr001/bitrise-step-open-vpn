@@ -24,9 +24,13 @@ echo ""
 
 echo "Load OVPN BASE64 File:"
 current_dir=$(pwd)
-ovpn_content=$vpn_ovpn_base64
+ovpn_content="$vpn_ovpn_base64"
 
-echo "ovpn_content: $(if [ ! -z "$ovpn_content" ]; then echo "***"; fi)"
+if [ ! -z "$ovpn_content" ]; then
+    echo "ovpn_content: $ovpn_content"
+else
+    echo "ovpn_content is empty."
+fi
 
 # Write base64 decoded content to file
 FILE_PATH="${current_dir}/client.ovpn"
